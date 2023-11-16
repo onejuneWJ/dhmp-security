@@ -5,7 +5,7 @@ import org.springframework.core.annotation.AliasFor;
 import java.lang.annotation.*;
 
 /**
- * 描述
+ * 权限等级
  *
  * @author 王俊
  * @date create in 2023/8/22
@@ -23,15 +23,15 @@ public @interface Permission {
 
     enum PermissionLevel {
         /**
-         * 内部调用
-         */
-        INTERNAL,
-        /**
-         * 公共
+         * 公共，不需要授权
          */
         PUBLIC,
         /**
-         * 需要授权
+         * 内部调用，需要携带内部调用token
+         */
+        INTERNAL,
+        /**
+         * 需要授权，需要授权token
          */
         SECURITY
     }

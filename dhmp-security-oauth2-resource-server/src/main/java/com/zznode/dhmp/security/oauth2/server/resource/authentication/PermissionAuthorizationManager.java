@@ -51,6 +51,9 @@ public class PermissionAuthorizationManager implements AuthorizationManager<Requ
                 Object handler = handlerExecutionChain.getHandler();
                 if (handler instanceof HandlerMethod handlerMethod) {
                     Permission permission = handlerMethod.getMethodAnnotation(Permission.class);
+                    if (permission == null) {
+                        permission = handlerMethod.getBeanType().getAnnotation(Permission.class);
+                    }
                     if (permission != null) {
                         PermissionLevel level = permission.level();
                         return checkPermission(level, authentication, requestAuthorizationContext);
@@ -79,8 +82,8 @@ public class PermissionAuthorizationManager implements AuthorizationManager<Requ
             // 内部调用可以不用授权, 但是得判定是否从feign或者restTemplate调用
             // 检查InternalToken
             String internalRequestToken = request.getHeader(InternalRequestHeaders.INTERNAL_TOKEN);
-            if (internalRequestToken != null) {
-                return new AuthorizationDecision(internalTokenManager.validate(internalRequestToken));
+            if (internalRequestToken != null && internalTokenManager.validate(internalRequestToken)) {
+                return new AuthorizationDecision(true);
             }
         }
         // security check
