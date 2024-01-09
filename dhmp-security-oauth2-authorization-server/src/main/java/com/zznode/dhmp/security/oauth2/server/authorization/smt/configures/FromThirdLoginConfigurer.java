@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.web.OAuth2AuthorizationEndpointFilter;
 import org.springframework.security.web.authentication.AuthenticationConverter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ public final class FromThirdLoginConfigurer<B extends HttpSecurityBuilder<B>> ex
 
     private AuthenticationConverter authenticationConverter;
 
+    private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler("/login?error");
+
+    private String failureUrl;
 
     public FromThirdLoginConfigurer() {
     }
@@ -36,6 +41,18 @@ public final class FromThirdLoginConfigurer<B extends HttpSecurityBuilder<B>> ex
 
     public FromThirdLoginConfigurer<B> authenticationConverter(AuthenticationConverter authenticationConverter) {
         this.authenticationConverter = authenticationConverter;
+        return this;
+    }
+
+    public FromThirdLoginConfigurer<B> failureUrl(String authenticationFailureUrl) {
+        FromThirdLoginConfigurer<B> result = failureHandler(new SimpleUrlAuthenticationFailureHandler(authenticationFailureUrl));
+        this.failureUrl = authenticationFailureUrl;
+        return result;
+    }
+
+    public FromThirdLoginConfigurer<B> failureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
+        this.failureUrl = null;
+        this.failureHandler = authenticationFailureHandler;
         return this;
     }
 
@@ -91,6 +108,9 @@ public final class FromThirdLoginConfigurer<B extends HttpSecurityBuilder<B>> ex
         SecurityContextHolderStrategy securityContextHolderStrategy = http.getSharedObject(SecurityContextHolderStrategy.class);
         if (securityContextHolderStrategy != null) {
             authFilter.setSecurityContextHolderStrategy(securityContextHolderStrategy);
+        }
+        if (this.failureHandler != null) {
+            authFilter.setFailureHandler(failureHandler);
         }
 
         FromThirdAuthenticationFilter filter = postProcess(authFilter);

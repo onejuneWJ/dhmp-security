@@ -39,7 +39,7 @@ public class FromThirdAuthenticationConverter implements AuthenticationConverter
             // 有且只能有一个
             return null;
         }
-        return new FromThirdAuthenticationToken(thirdToken, redirectRoute, fromSystem);
+        return new FromThirdAuthenticationToken(thirdToken, redirectRoute, fromSystem.trim());
     }
 
     private MultiValueMap<String, String> getQueryParameters(HttpServletRequest request) {
