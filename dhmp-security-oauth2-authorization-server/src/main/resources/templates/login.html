@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>数字家庭管理平台</title>
+    <!-- 新 Bootstrap4 核心 CSS 文件 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="/js/popper.min.js" th:src="@{/webjars/popper.js/umd/popper.js}"></script>
+
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="/css/login.css" th:href="@{/css/login.css}">
+    <style>
+
+        article {
+            display: flex;
+            height: 80vh;
+            background-repeat: no-repeat;
+            background-position: 65% center;
+            background-size: cover;
+            background-image: url("../img/banner01.png");
+        }
+    </style>
+
+    <template id="templateAttributes"
+              th:attr="data-password_encrypt=${PASSWORD_ENCRYPT}, data-username_encrypt=${USERNAME_ENCRYPT}, data-public_key=${PUBLIC_KEY}"
+    >
+    </template>
+</head>
+<body>
+<header>
+    <div class="centerBox">
+        <div class="logoBox"></div>
+        <h1>数字家庭管理平台</h1>
+    </div>
+</header>
+<article>
+
+    <div class="container">
+        <form id="loginForm" class="form-login needs-validation" method="post" novalidate autocomplete="off">
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                <p style="margin: 0" th:text="${ERROR_MESSAGE}">Invalid username or password.</p>
+            </div>
+
+            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                You have been logged out.
+            </div>
+            <h2 class="form-login-heading">用户登录</h2>
+            <div class="form-group">
+                <label for="username" class="sr-only">用户名</label>
+                <input type="text" id="username" name="username" class="form-control need-validate" placeholder="用户名"
+                       required
+                       autofocus>
+                <div class="invalid-feedback">请输入用户名！</div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="sr-only">密码</label>
+                <input type="password" id="password" name="password" class="form-control need-validate"
+                       placeholder="密码"
+                       required>
+                <div class="invalid-feedback">请输入密码！</div>
+            </div>
+            <div class="form-group captcha-group" style="display: flex">
+                <label for="captcha">
+
+                    <input type="text" id="captcha" name="captcha" class="form-control need-validate"
+                           placeholder="验证码"
+                           required
+                           autocomplete="off">
+                    <span class="invalid-feedback">请输入验证码！</span>
+                </label>
+                <img class="captcha" th:src="@{/login/captcha}" alt="验证码" src="">
+            </div>
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        </form>
+    </div>
+</article>
+<footer>
+    <p>版权所有 直真科技</p>
+</footer>
+<script src="/js/crypto-js.js" th:src="@{/js/crypto-js.js}"></script>
+<script src="/js/jsencrypt.min.js" th:src="@{/js/jsencrypt.min.js}"></script>
+<script src="/js/login.js" th:src="@{/js/login.js}"></script>
+
+</body>
+</html>

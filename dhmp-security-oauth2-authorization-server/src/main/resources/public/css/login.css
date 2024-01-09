@@ -1,0 +1,58 @@
+
+header {
+    height: 80px;
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-login {
+    width: 320px;
+    /*max-height: 400px;*/
+    padding: 16px;
+    margin: 0 0 0 auto;
+    background-color: rgba(232, 247, 252, 0.9);
+}
+
+.form-login .form-login-heading {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.7rem;
+}
+
+.form-login .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.captcha-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.captcha-group label {
+    margin: 0;
+    padding-right: 16px;
+}
+
+.captcha-group img.captcha {
+    cursor: pointer;
+}
+
+footer {
+    display: flex;
+}
+
+footer p {
+    font-size: 20px;
+    margin-left: auto;
+    padding: 8px 24px;
+}

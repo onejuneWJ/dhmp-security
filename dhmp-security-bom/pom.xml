@@ -24,6 +24,11 @@
                 <artifactId>dhmp-security-oauth2-resource-server</artifactId>
                 <version>${dhmp-security.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zznode.dhmp.security</groupId>
+                <artifactId>dhmp-security-oauth2-authorization-server</artifactId>
+                <version>${dhmp-security.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
