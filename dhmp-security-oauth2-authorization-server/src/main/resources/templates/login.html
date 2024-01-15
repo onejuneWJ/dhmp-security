@@ -86,6 +86,13 @@
 <footer>
     <p>版权所有 直真科技</p>
 </footer>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    ctxPath = /*[[@{/}]]*/ '';
+    /*]]>*/
+    ctxPath = ctxPath.substring(0, ctxPath.lastIndexOf('/'));
+    document.querySelector('#article').style.backgroundImage = `url("${ctxPath}/img/banner02.png")`
+</script>
 <script src="/js/crypto-js.js" th:src="@{/js/crypto-js.js}"></script>
 <script src="/js/jsencrypt.min.js" th:src="@{/js/jsencrypt.min.js}"></script>
 <script src="/js/login.js" th:src="@{/js/login.js}"></script>

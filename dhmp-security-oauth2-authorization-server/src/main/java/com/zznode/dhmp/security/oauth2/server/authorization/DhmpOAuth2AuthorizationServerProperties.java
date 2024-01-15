@@ -14,6 +14,11 @@ import java.time.Duration;
 public class DhmpOAuth2AuthorizationServerProperties {
 
     /**
+     * 登录地址，未授权访问会跳转至登录地址。
+     */
+    private String loginUrl = "/login";
+
+    /**
      * 登录页面模板.
      */
     private String loginTemplate = "login";
@@ -48,6 +53,14 @@ public class DhmpOAuth2AuthorizationServerProperties {
     private Captcha captcha = new Captcha();
 
     private AccountManagement accountManagement = new AccountManagement();
+
+    public String getLoginUrl() {
+        return loginUrl;
+    }
+
+    public void setLoginUrl(String loginUrl) {
+        this.loginUrl = loginUrl;
+    }
 
     public String getLoginTemplate() {
         return loginTemplate;
@@ -128,12 +141,22 @@ public class DhmpOAuth2AuthorizationServerProperties {
          */
         private Integer codeCount = 4;
 
+        private Boolean dev = false;
+
         public Integer getCodeCount() {
             return codeCount;
         }
 
         public void setCodeCount(Integer codeCount) {
             this.codeCount = codeCount;
+        }
+
+        public Boolean getDev() {
+            return dev;
+        }
+
+        public void setDev(Boolean dev) {
+            this.dev = dev;
         }
     }
 

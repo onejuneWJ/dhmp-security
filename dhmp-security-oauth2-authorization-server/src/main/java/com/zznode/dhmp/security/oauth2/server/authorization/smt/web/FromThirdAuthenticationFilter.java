@@ -104,9 +104,12 @@ public class FromThirdAuthenticationFilter extends OncePerRequestFilter {
         // 不要问为什么两个try分开，filterChain.doFilter(request, response);这句话不能被try包含。
         try {
             Authentication authenticationResult = this.authenticationManager.authenticate(authentication);
+            // 正常情况authenticationResult都是认证通过的，没通过都抛出异常了
             if (authenticationResult.isAuthenticated()) {
                 // 第三方认证成功，保存认证信息。
                 successfulAuthentication(request, response, filterChain, authenticationResult);
+                filterChain.doFilter(request, response);
+                return;
             }
         } catch (AuthenticationException e) {
             logger.error("failed to authenticate from third party", e);

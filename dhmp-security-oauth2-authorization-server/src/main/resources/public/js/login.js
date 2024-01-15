@@ -97,7 +97,7 @@ function encrypt(word) {
 
 
 $('img.captcha').click(function () {
-    $(this).prop("src", '/login/captcha?t=' + new Date().getTime())
+    $(this).prop("src", ctxPath + '/login/captcha?t=' + new Date().getTime())
 })
 
 
@@ -108,7 +108,7 @@ function createAndSubmitLogin(formData) {
     let csrfToken = formData.get("_csrf");
     let submitForm = document.createElement("form");
     submitForm.style.display = "none";
-    submitForm.action = "/login";
+    submitForm.action = ctxPath + "/login";
     submitForm.method = "post";
     submitForm.autocomplete = "off";
     const newUsername = CONFIG_ATTR.getBoolean("usernameNeedEncrypt") ? encrypt(username) : username
@@ -157,7 +157,7 @@ function verifyCaptcha(captchaInput) {
             return
         }
         $.ajax({
-            url: '/login/verify-captcha',
+            url: ctxPath + '/login/verify-captcha',
             type: 'get',
             data: {code: captcha},
             success: function (data) {

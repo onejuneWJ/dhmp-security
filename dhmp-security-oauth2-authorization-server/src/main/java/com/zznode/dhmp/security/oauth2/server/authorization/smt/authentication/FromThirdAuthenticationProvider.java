@@ -40,6 +40,7 @@ public class FromThirdAuthenticationProvider extends DaoAuthenticationProvider {
                     if (e instanceof AuthenticationException authenticationException) {
                         throw authenticationException;
                     }
+                    // 抛出InternalAuthenticationServiceException可直接抛至filter,否则会继续在父级ProviderManger执行认证
                     throw new InternalAuthenticationServiceException(e.getMessage(), e);
                 }
                 if (usernamePasswordAuthenticationToken != null) {

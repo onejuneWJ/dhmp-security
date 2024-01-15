@@ -106,7 +106,7 @@ public class LoginServiceImpl implements LoginService, MessageSourceAware {
                     response.setContentType("image/jpeg");
 
                     try (ServletOutputStream out = response.getOutputStream()) {
-                        ICaptcha captcha = CaptchaUtil.createShearCaptcha(100, 46, properties.getCaptcha().getCodeCount(), 4);
+                        ICaptcha captcha = CaptchaUtil.createLineCaptcha(100, 46, properties.getCaptcha().getCodeCount(), 150);
                         captcha.createCode();
                         String code = captcha.getCode();
                         session.setAttribute(AuthAttributes.CAPTCHA, code);
