@@ -4,6 +4,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import com.zznode.dhmp.security.oauth2.server.authorization.constants.AuthAttributes;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
@@ -56,6 +57,12 @@ public class ExUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
 
         String privateKey = (String) request.getSession().getAttribute(AuthAttributes.PRIVATE_KEY);
         String publicKey = (String) request.getSession().getAttribute(AuthAttributes.PUBLIC_KEY);
-        return SecureUtil.rsa(privateKey, publicKey).decryptStr(str, KeyType.PrivateKey);
+        String decryptStr;
+        try {
+            decryptStr = SecureUtil.rsa(privateKey, publicKey).decryptStr(str, KeyType.PrivateKey);
+        } catch (Exception e) {
+            throw new InternalAuthenticationServiceException("error decrypt str", e);
+        }
+        return decryptStr;
     }
 }
