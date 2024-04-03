@@ -1,0 +1,66 @@
+apply plugin: "maven-publish"
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                afterEvaluate {
+                    name = project.description
+                    description = project.description
+                }
+                url = "https://gitlab.zznode.com/jun.wang7142/dhmp-security"
+                organization {
+                    name = "zznode"
+                    url = "https://www.zznode.com/"
+                }
+                scm {
+                    url = "https://gitlab.zznode.com/jun.wang7142/dhmp-security"
+                }
+                developers {
+                    developer {
+                        id = "onejune"
+                        name = "王俊"
+                        email = "jun.wang7142@zznode.com"
+                    }
+                }
+            }
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionResult()
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+}
+
+configureDeploymentRepository(project)
+
+void configureDeploymentRepository(Project project) {
+    project.plugins.withType(MavenPublishPlugin.class).all {
+        PublishingExtension publishing = project.getExtensions().getByType(PublishingExtension.class);
+        if (project.hasProperty("publishToSnapshot")) {
+            if ("true" == project.findProperty("publishToSnapshot")) {
+                publishing.getRepositories().maven((mavenRepository) -> {
+                    mavenRepository.setUrl(project.findProperty("snapshotRepository"));
+                    mavenRepository.setName("snapshot");
+                    mavenRepository.credentials(c -> {
+                        c.setUsername((String) project.findProperty("snapshotUsername"));
+                        c.setPassword((String) project.findProperty("snapshotPassword"));
+                    });
+                });
+            } else {
+                publishing.getRepositories().maven((mavenRepository) -> {
+                    mavenRepository.setUrl(project.findProperty("releaseRepository"));
+                    mavenRepository.setName("release");
+                    mavenRepository.credentials(c -> {
+                        c.setUsername((String) project.findProperty("releaseUsername"));
+                        c.setPassword((String) project.findProperty("releasePassword"));
+                    });
+                });
+            }
+        }
+    }
+}

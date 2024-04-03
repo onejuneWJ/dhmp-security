@@ -1,0 +1,23 @@
+description = "dhmp-security 组件依赖"
+
+apply plugin: 'java-platform'
+apply from: "$rootDir/gradle/publications.gradle"
+
+group = "com.zznode.dhmp.security"
+
+dependencies {
+    constraints {
+        parent.moduleProjects.sort { "$it.name" }.each {
+            api it
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'dhmp-security-bom'
+            from components.javaPlatform
+        }
+    }
+}

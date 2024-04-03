@@ -1,0 +1,21 @@
+apply plugin: 'java-library'
+apply plugin: 'org.springframework.build.optional-dependencies'
+apply from: "$rootDir/gradle/publications.gradle"
+
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
+    // Don't include or exclude anything explicitly by default. See SPR-12085.
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+        }
+    }
+}
+
