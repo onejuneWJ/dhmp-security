@@ -4,7 +4,7 @@ package com.zznode.dhmp.security.oauth2.server.authorization.service.impl;
 import com.zznode.dhmp.core.message.DhmpMessageSource;
 import com.zznode.dhmp.security.core.CustomUserDetails;
 import com.zznode.dhmp.security.oauth2.server.authorization.context.LoginUserContextHolder;
-import com.zznode.dhmp.security.oauth2.server.authorization.domain.IamUser;
+import com.zznode.dhmp.security.oauth2.server.authorization.domain.UserDTO;
 import com.zznode.dhmp.security.oauth2.server.authorization.service.UserAccountManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户
@@ -41,38 +41,40 @@ public class CustomUserDetailsManager implements UserDetailsManager, MessageSour
     }
 
 
-    protected List<GrantedAuthority> loadUserAuthorities(String username) {
-        // todo 暂时写死
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("read"));
-        authorities.add(new SimpleGrantedAuthority("write"));
-        authorities.add(new SimpleGrantedAuthority("common"));
-        return authorities;
+    protected List<GrantedAuthority> loadUserAuthorities(Long userId) {
+        return userAccountManager.getUserRoles(userId).stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 缓存正在登录的用户信息
         LoginUserContextHolder.setCurrentLoginUser(new CustomUserDetails(username));
-        IamUser user = userAccountManager.getByUsername(username);
+        UserDTO user = userAccountManager.getByUsername(username);
         if (user == null) {
             this.logger.debug("Query returned no results for user '" + username + "'");
             throw new UsernameNotFoundException(this.messages.getMessage("JdbcDaoImpl.notFound",
                     new Object[]{username}, "Username {0} not found"));
         }
-        List<GrantedAuthority> grantedAuthorities = loadUserAuthorities(user.getUsername());
+        List<GrantedAuthority> grantedAuthorities = loadUserAuthorities(user.getUserId());
+        if (grantedAuthorities.isEmpty()) {
+            this.logger.debug("User '" + username + "' has no authorities and will be treated as 'not found'");
+            throw new UsernameNotFoundException(this.messages.getMessage("JdbcDaoImpl.noAuthority",
+                    new Object[]{username}, "User {0} has no GrantedAuthority"));
+        }
         CustomUserDetails userDetails = mapToCustomUserDetails(user, grantedAuthorities);
         // 更新完整缓存信息
         LoginUserContextHolder.setCurrentLoginUser(userDetails);
         return userDetails;
     }
 
-    public CustomUserDetails mapToCustomUserDetails(IamUser iamUser, List<GrantedAuthority> grantedAuthorities) {
-        boolean enabledFlag = !iamUser.getDisabled();
-        boolean unLockedFlag = !iamUser.getLocked();
-        CustomUserDetails customUserDetails = new CustomUserDetails(iamUser.getUsername(), iamUser.getPassword(),
+    public CustomUserDetails mapToCustomUserDetails(UserDTO userDTO, List<GrantedAuthority> grantedAuthorities) {
+        boolean enabledFlag = !userDTO.getDisabled();
+        boolean unLockedFlag = !userDTO.getLocked();
+        CustomUserDetails customUserDetails = new CustomUserDetails(userDTO.getUsername(), userDTO.getPassword(),
                 enabledFlag, true, true, unLockedFlag, grantedAuthorities);
-        BeanUtils.copyProperties(iamUser, customUserDetails);
+        BeanUtils.copyProperties(userDTO, customUserDetails);
         return customUserDetails;
     }
 

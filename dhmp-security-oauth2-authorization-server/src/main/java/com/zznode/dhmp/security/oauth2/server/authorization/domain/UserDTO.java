@@ -9,7 +9,7 @@ import java.util.Date;
  * @author 王俊
  * @date create in 2023/8/17
  */
-public class IamUser {
+public class UserDTO {
 
     public static final String DEFAULT_USER_TABLE_NAME = "iam_user";
 

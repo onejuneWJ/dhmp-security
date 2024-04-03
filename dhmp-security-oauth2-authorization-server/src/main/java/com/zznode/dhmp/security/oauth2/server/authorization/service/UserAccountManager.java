@@ -1,6 +1,8 @@
 package com.zznode.dhmp.security.oauth2.server.authorization.service;
 
-import com.zznode.dhmp.security.oauth2.server.authorization.domain.IamUser;
+import com.zznode.dhmp.security.oauth2.server.authorization.domain.UserDTO;
+
+import java.util.List;
 
 /**
  * 描述
@@ -38,7 +40,9 @@ public interface UserAccountManager {
      * @param username 用户名
      * @return 用户
      */
-    IamUser getByUsername(String username);
+    UserDTO getByUsername(String username);
+
+    List<String> getUserRoles(Long userId);
 
     /**
      * 登录记录
