@@ -5,8 +5,8 @@ import com.zznode.dhmp.security.oauth2.server.resource.annotation.Permission;
 import com.zznode.dhmp.security.oauth2.server.resource.annotation.Permission.PermissionLevel;
 import com.zznode.dhmp.web.client.InternalTokenManager;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authorization.AuthenticatedAuthorizationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -14,7 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.springframework.web.servlet.handler.MatchableHandlerMapping;
 
 import java.util.function.Supplier;
 
@@ -27,17 +28,17 @@ import java.util.function.Supplier;
  */
 public class PermissionAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
 
-    private final Logger logger = LoggerFactory.getLogger(PermissionAuthorizationManager.class);
+    private final Log logger = LogFactory.getLog(PermissionAuthorizationManager.class);
 
-    private final RequestMappingHandlerMapping handlerMapping;
+    private final HandlerMappingIntrospector handlerMappingIntrospector;
     private final InternalTokenManager internalTokenManager;
     /**
      *
      */
     private final AuthorizationManager<RequestAuthorizationContext> delegate = new AuthenticatedAuthorizationManager<>();
 
-    public PermissionAuthorizationManager(RequestMappingHandlerMapping handlerMapping, InternalTokenManager internalTokenManager) {
-        this.handlerMapping = handlerMapping;
+    public PermissionAuthorizationManager(HandlerMappingIntrospector handlerMappingIntrospector, InternalTokenManager internalTokenManager) {
+        this.handlerMappingIntrospector = handlerMappingIntrospector;
         this.internalTokenManager = internalTokenManager;
     }
 
@@ -46,7 +47,11 @@ public class PermissionAuthorizationManager implements AuthorizationManager<Requ
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext requestAuthorizationContext) {
         HttpServletRequest request = requestAuthorizationContext.getRequest();
         try {
-            HandlerExecutionChain handlerExecutionChain = handlerMapping.getHandler(request);
+            MatchableHandlerMapping mapping = handlerMappingIntrospector.getMatchableHandlerMapping(request);
+            if (mapping == null) {
+                return delegate.check(authentication, requestAuthorizationContext);
+            }
+            HandlerExecutionChain handlerExecutionChain = mapping.getHandler(request);
             if (handlerExecutionChain != null) {
                 Object handler = handlerExecutionChain.getHandler();
                 if (handler instanceof HandlerMethod handlerMethod) {

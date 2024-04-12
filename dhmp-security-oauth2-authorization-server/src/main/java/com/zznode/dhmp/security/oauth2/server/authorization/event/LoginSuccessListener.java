@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zznode.dhmp.security.core.CustomUserDetails;
 import com.zznode.dhmp.security.core.jackson2.DhmpOAuth2Jackson2Module;
 import com.zznode.dhmp.security.oauth2.server.authorization.service.UserAccountManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ import static com.zznode.dhmp.security.core.constants.OAuth2RedisKeys.PASSWORD_E
  */
 public class LoginSuccessListener implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
 
-    private final Logger logger = LoggerFactory.getLogger(LoginSuccessListener.class);
+    private final Log logger = LogFactory.getLog(LoginSuccessListener.class);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

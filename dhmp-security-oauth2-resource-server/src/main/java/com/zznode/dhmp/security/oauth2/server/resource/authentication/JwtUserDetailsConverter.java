@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zznode.dhmp.security.core.CustomUserDetails;
 import com.zznode.dhmp.security.core.constants.CustomUserClaimNames;
 import com.zznode.dhmp.security.core.jackson2.DhmpOAuth2Jackson2Module;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class JwtUserDetailsConverter implements Converter<Jwt, UserDetails> {
 
-    private final Logger logger = LoggerFactory.getLogger(JwtUserDetailsConverter.class);
+    private final Log logger = LogFactory.getLog(JwtUserDetailsConverter.class);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

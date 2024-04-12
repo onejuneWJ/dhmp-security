@@ -6,8 +6,8 @@ import com.zznode.dhmp.security.core.CustomUserDetails;
 import com.zznode.dhmp.security.oauth2.server.authorization.context.LoginUserContextHolder;
 import com.zznode.dhmp.security.oauth2.server.authorization.domain.UserDTO;
 import com.zznode.dhmp.security.oauth2.server.authorization.service.UserAccountManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 public class CustomUserDetailsManager implements UserDetailsManager, MessageSourceAware {
 
-    private final Logger logger = LoggerFactory.getLogger(CustomUserDetailsManager.class);
+    private final Log logger = LogFactory.getLog(CustomUserDetailsManager.class);
 
     private MessageSourceAccessor messages = DhmpMessageSource.getAccessor();
 

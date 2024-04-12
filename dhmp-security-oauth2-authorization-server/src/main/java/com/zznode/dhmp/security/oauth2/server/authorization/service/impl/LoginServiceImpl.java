@@ -16,8 +16,8 @@ import com.zznode.dhmp.security.oauth2.server.authorization.service.LoginService
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -41,7 +41,7 @@ import java.security.KeyPair;
 @ProvinceComponent
 public class LoginServiceImpl implements LoginService, MessageSourceAware {
 
-    private final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private final Log logger = LogFactory.getLog(LoginServiceImpl.class);
 
     private MessageSourceAccessor messages = DhmpMessageSource.getAccessor();
 
@@ -114,7 +114,7 @@ public class LoginServiceImpl implements LoginService, MessageSourceAware {
                         captcha.write(out);
                         out.flush();
                     } catch (Exception e) {
-                        logger.info("create captcha fail: {}", e.getMessage());
+                        logger.info("error creating captcha.", e);
                     }
                     return null;
                 });

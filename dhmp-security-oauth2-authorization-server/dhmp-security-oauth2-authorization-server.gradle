@@ -4,10 +4,17 @@ dependencies {
     api("com.zznode.dhmp:dhmp-context")
     api("com.zznode.dhmp:dhmp-data-commons")
     api("com.zznode.dhmp:dhmp-web")
-    api("org.springframework.data:spring-data-redis")
+    api("org.springframework.data:spring-data-redis") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
     api("org.springframework:spring-webmvc")
     api("org.springframework.security:spring-security-oauth2-authorization-server")
     api("org.apache.tomcat.embed:tomcat-embed-core")
+    api("org.thymeleaf:thymeleaf-spring6") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
     api("org.webjars:bootstrap")
-    api("org.webjars:webjars-locator-core")
+    api("org.webjars:webjars-locator-core") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
 }

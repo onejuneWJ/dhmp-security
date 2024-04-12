@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zznode.dhmp.security.core.CustomUserDetails;
 import com.zznode.dhmp.security.core.constants.CustomUserClaimNames;
 import com.zznode.dhmp.security.core.jackson2.DhmpOAuth2Jackson2Module;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
@@ -22,7 +22,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 @SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 public class CustomUserDetailsOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
 
-    private final Logger logger = LoggerFactory.getLogger(CustomUserDetailsOAuth2TokenCustomizer.class);
+    private final Log logger = LogFactory.getLog(CustomUserDetailsOAuth2TokenCustomizer.class);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

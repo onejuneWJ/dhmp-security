@@ -1,7 +1,7 @@
 package com.zznode.dhmp.security.oauth2.server.resource.authentication;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class DhmpJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
-    private final Logger logger = LoggerFactory.getLogger(DhmpJwtAuthenticationConverter.class);
+    private final Log logger = LogFactory.getLog(DhmpJwtAuthenticationConverter.class);
 
     private final Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
