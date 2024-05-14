@@ -9,7 +9,7 @@ dependencies {
     }
     api("org.springframework:spring-webmvc")
     api("org.springframework.security:spring-security-oauth2-authorization-server")
-    api("org.apache.tomcat.embed:tomcat-embed-core")
+    api("jakarta.servlet:jakarta.servlet-api:6.0.0")
     api("org.thymeleaf:thymeleaf-spring6") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
